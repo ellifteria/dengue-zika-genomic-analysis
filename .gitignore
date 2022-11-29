@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+expression/
+STAR/
+GRCh38.p12.genome.fa
+gencode.v28.annotation.gtf
+hg38_Gencode_V28.bed
+ensemblID2genesym.txt
+hg38.chrom.sizes
