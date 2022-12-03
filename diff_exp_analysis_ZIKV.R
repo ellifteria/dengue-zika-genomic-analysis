@@ -92,7 +92,7 @@ resOrdered # display the ordered results
 write.csv(as.data.frame(resOrdered),
 	  file="ZIKV_infected_results.csv") # write the ordered results as a dataframe to a csv file
 
-resSig <- subset(resOrdered, padj < 0.1) # get the subset of the results with an adjusted p-value less than 0.1
+resSig <- subset(resOrdered, padj < 0.15) # get the subset of the results with an adjusted p-value less than 0.1
 resSig # display the significant results
 
 write.csv(as.data.frame(resSig),

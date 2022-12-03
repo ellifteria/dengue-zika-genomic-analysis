@@ -92,7 +92,7 @@ resOrdered # display the ordered results
 write.csv(as.data.frame(resOrdered),
 	  file="DENV_infected_results.csv") # write the ordered results as a dataframe to a csv file
 
-resSig <- subset(resOrdered, padj < 0.1) # get the subset of the results with an adjusted p-value less than 0.1
+resSig <- subset(resOrdered, padj < 0.15) # get the subset of the results with an adjusted p-value less than 0.1
 resSig # display the significant results
 
 write.csv(as.data.frame(resSig),
@@ -147,8 +147,8 @@ sampleDists <- dist(t(assay(vsd))) # save sample distribution from vst tranform 
 library("RColorBrewer") # load RColorBrewer library to edit colors for plot
 sampleDistMatrix <- as.matrix(sampleDists) # make sample distributions a matrix
 rownames(sampleDistMatrix) <- paste(vsd$donor, vsd$infection_status, sep="-") # set row names of sample distribution matrix
-colnames(sampleDistMatrix) <- NULL # set column names of sample distribution matrix to NULL
-colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255) # define colors desired for plot
+colnames(sampleDistMatrix) <- paste(vsd$donor, vsd$infection_status, sep="-") # NULL # set column names of sample distribution matrix to NULL
+colors <- colorRampPalette(rev(brewer.pal(9, "Purples")))(255) # define colors desired for plot
 pheatmap(sampleDistMatrix,
 	 clustering_distance_rows=sampleDists,
 	 clustering_distance_cols=sampleDists,
