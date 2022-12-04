@@ -12,3 +12,5 @@ hg38.chrom.sizes
 *.theta
 *.model
 *.cnt
+.vscode
+

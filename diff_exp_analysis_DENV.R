@@ -62,7 +62,7 @@ plotMA(res, ylim=c(-2,2)) # plot the log2 fold change for the mean of the normal
 plotMA(resLFC, ylim=c(-2, 2)) # plot the log2 fold change for the mean of the normalized counts of all the samples in the gene count DESeq analysis results table post-shrinkage
 
 # idx <- identify(res$baseMean, res$logFoldChange) # interactively detect the row number of individual genes
-rownames(res)[idx] # display the gene identifiers of the selected genes
+# rownames(res)[idx] # display the gene identifiers of the selected genes
 
 resultsNames(dds) # display the coefficients of the gene count DESeq analysis
 
@@ -92,7 +92,7 @@ resOrdered # display the ordered results
 write.csv(as.data.frame(resOrdered),
 	  file="DENV_infected_results.csv") # write the ordered results as a dataframe to a csv file
 
-resSig <- subset(resOrdered, padj < 0.15) # get the subset of the results with an adjusted p-value less than 0.1
+resSig <- subset(resOrdered, padj < 0.1) # get the subset of the results with an adjusted p-value less than 0.1
 resSig # display the significant results
 
 write.csv(as.data.frame(resSig),

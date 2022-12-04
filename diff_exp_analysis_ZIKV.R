@@ -41,7 +41,7 @@ resLFC # display the results table after effect size shrinkage
 resOrdered <- res[order(res$pvalue),] # order the results by smallest p-value
 summary(res) # display a summary of the results table
 
-sum(res$padj < 0.1, na.rm=TRUE) # calculate the number of adjusted p-values less than 0.1
+sum(res$padj < 0.2, na.rm=TRUE) # calculate the number of adjusted p-values less than 0.1
 
 res05 <- results(dds, alpha=0.05) # generate a new results table with alpha set to 0.05 instead of the default value of 0.1
 summary(res05) # display a summary of the new results table
@@ -62,7 +62,7 @@ plotMA(res, ylim=c(-2,2)) # plot the log2 fold change for the mean of the normal
 plotMA(resLFC, ylim=c(-2, 2)) # plot the log2 fold change for the mean of the normalized counts of all the samples in the gene count DESeq analysis results table post-shrinkage
 
 # idx <- identify(res$baseMean, res$logFoldChange) # interactively detect the row number of individual genes
-rownames(res)[idx] # display the gene identifiers of the selected genes
+# rownames(res)[idx] # display the gene identifiers of the selected genes
 
 resultsNames(dds) # display the coefficients of the gene count DESeq analysis
 
@@ -92,7 +92,7 @@ resOrdered # display the ordered results
 write.csv(as.data.frame(resOrdered),
 	  file="ZIKV_infected_results.csv") # write the ordered results as a dataframe to a csv file
 
-resSig <- subset(resOrdered, padj < 0.15) # get the subset of the results with an adjusted p-value less than 0.1
+resSig <- subset(resOrdered, padj < 0.1) # get the subset of the results with an adjusted p-value less than 0.1
 resSig # display the significant results
 
 write.csv(as.data.frame(resSig),
