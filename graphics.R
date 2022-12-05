@@ -9,20 +9,49 @@ data <- c(
     zu = read.delim("gene-ontology/ZIKV_infected_upreg_gene_names.txt", header=FALSE)
 )
 
-ggVennDiagram(data[c("dd.V1", "zd.V1")],
-    label_alpha = 0,
-    category.names = c("Dengue downregulated", "Zika downregulated"))
-ggVennDiagram(data[c("du.V1", "zu.V1")],
-    label_alpha = 0,
-    category.names = c("Dengue upregulated", "Zika upregulated"))
-ggVennDiagram(data[c("dd.V1", "zu.V1")],
-    label_alpha = 0,
-    category.names = c("Dengue downregulated", "Zika upregulated"))
-ggVennDiagram(data[c("du.V1", "zd.V1")],
-    label_alpha = 0,
-    category.names = c("Dengue upregulated", "Zika downregulated"))
+names(data) <- c(
+    "Dengue downregulated",
+    "Dengue upregulated",
+    "Zika downregulated",
+    "Zika upregulated")
 
-ggvenn(data[c("dd.V1", "zd.V1")], show_percentage = FALSE)
-ggvenn(data[c("du.V1", "zu.V1")], show_percentage = FALSE)
-ggvenn(data[c("du.V1", "zd.V1")], show_percentage = FALSE)
-ggvenn(data[c("dd.V1", "zu.V1")], show_percentage = FALSE)
+# ggVennDiagram(data[c("dd", "zd.V1")],
+#     label_alpha = 0,
+#     category.names = c("Dengue downregulated", "Zika downregulated"))
+# ggVennDiagram(data[c("du.V1", "zu.V1")],
+#     label_alpha = 0,
+#     category.names = c("Dengue upregulated", "Zika upregulated"))
+# ggVennDiagram(data[c("dd.V1", "zu.V1")],
+#     label_alpha = 0,
+#     category.names = c("Dengue downregulated", "Zika upregulated"))
+# ggVennDiagram(data[c("du.V1", "zd.V1")],
+#     label_alpha = 0,
+#     category.names = c("Dengue upregulated", "Zika downregulated"))
+
+ggvenn(
+    data,
+    show_percentage = FALSE,
+    columns = c(
+        "Dengue downregulated",
+        "Zika downregulated"))
+ggvenn(
+    data,
+    show_percentage = FALSE,
+    columns = c(
+        "Dengue upregulated",
+        "Zika upregulated"))
+
+ggvenn(
+    data,
+    show_percentage = FALSE,
+    columns = c(
+        "Dengue downregulated",
+        "Zika upregulated"))
+
+ggvenn(
+    data,
+    show_percentage = FALSE,
+    columns = c(
+        "Dengue upregulated",
+        "Zika downregulated"))
+
