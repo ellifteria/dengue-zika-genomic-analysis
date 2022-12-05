@@ -14,19 +14,7 @@ names(data) <- c(
     "Dengue upregulated",
     "Zika downregulated",
     "Zika upregulated")
-
-# ggVennDiagram(data[c("dd", "zd.V1")],
-#     label_alpha = 0,
-#     category.names = c("Dengue downregulated", "Zika downregulated"))
-# ggVennDiagram(data[c("du.V1", "zu.V1")],
-#     label_alpha = 0,
-#     category.names = c("Dengue upregulated", "Zika upregulated"))
-# ggVennDiagram(data[c("dd.V1", "zu.V1")],
-#     label_alpha = 0,
-#     category.names = c("Dengue downregulated", "Zika upregulated"))
-# ggVennDiagram(data[c("du.V1", "zd.V1")],
-#     label_alpha = 0,
-#     category.names = c("Dengue upregulated", "Zika downregulated"))
+    
 
 ggvenn(
     data,
