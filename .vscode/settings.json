@@ -1,3 +1,7 @@
 {
-    "workbench.colorTheme": "Qiita"
+    "workbench.colorTheme": "Qiita",
+    "cSpell.words": [
+        "downregulated",
+        "upregulated"
+    ]
 }
