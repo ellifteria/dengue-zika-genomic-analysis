@@ -40,3 +40,68 @@ ggplot(d_u_FAC, aes(x = reorder(term, -1* order), y = enrichment, fill = Categor
         y = "Fold enrichment",
         title = "Dengue upregulated RNAs:\nMost enriched functional annotation clusters"
     )
+
+d_d_FAC = data.frame(
+    term = c(
+        "DNA binding"
+    ),
+    enrichment = c(
+        8.486806596701648
+    ),
+    Category = c(
+        "Molecular function"
+    ),
+    order = c(
+        1
+    )
+)
+
+ggplot(d_d_FAC, aes(x = reorder(term, -1* order), y = enrichment, fill = Category)) +
+    geom_bar(stat = "identity") +
+    coord_flip() +
+    labs(
+        legend = "Category",
+        x = "Term",
+        y = "Fold enrichment",
+        title = "Dengue downregulated RNAs:\nMost enriched functional annotation clusters"
+    )
+
+z_d_FAC = data.frame(
+    term = c(
+        "nucleosome",
+        "structural constituent\nof chromatin",
+        "ATP binding",
+        "ubiquitin protein\nligase binding",
+        "protein processing in\nendoplasmic reticulum"
+    ),
+    enrichment = c(
+        57.30337078651685,
+        52.14269788182832,
+        ,
+        ,
+        
+    ),
+    Category = c(
+        "Biological process",
+        "Molecular function",
+        "Molecular function",
+        "Molecular function",
+        "KEGG pathway"
+    ),
+    order = c(
+        1,
+        2,
+        3,
+        4,
+        5
+    )
+)
+ggplot(z_d_FAC, aes(x = reorder(term, -1* order), y = enrichment, fill = Category)) +
+    geom_bar(stat = "identity") +
+    coord_flip() +
+    labs(
+        legend = "Category",
+        x = "Term",
+        y = "Fold enrichment",
+        title = "Zika downregulated RNAs:\nMost enriched functional annotation clusters"
+    )

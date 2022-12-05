@@ -72,15 +72,9 @@ resAsh <- lfcShrink(dds, coef="infection_status_DENV_infected_vs_uninfected", ty
 par(mfrow=c(1,3), mar=c(4,4,2,1)) # set up plotting so that it displays plots adjacent to each other
 xlim <- c(1,1e5) # set limits on the x-axis to be used across plots
 ylim <- c(-3,3) # set limits on the y-axis to be used across plots
-# png("denv_resLFC_MA_plot.png")
 plotMA(resLFC, xlim=xlim, ylim=ylim, main="apeglm") # plot post-shrinkage data using apeglm shrinkage estimator
-# dev.off()
-# png("denv_resNorm_MA_plot.png")
 plotMA(resNorm, xlim=xlim, ylim=ylim, main="normal") # plot post-shrinkage data using normal shrinkage estimator
-# dev.off()
-# png("denv_resASH_MA_plot.png")
 plotMA(resAsh, xlim=xlim, ylim=ylim, main="ashr")# plot post-shrinkage data using adaptive shrinkage estimator, ashr
-# dev.off()
 
 plotCounts(dds, gene=which.min(res$padj), intgroup="infection_status") # plot normalized gene counts by donor
 
@@ -90,7 +84,6 @@ library("ggplot2") # load ggplot2 library
 ggplot(d, aes(x=infection_status, y=count)) + 
 	geom_point(position=position_jitter(w=0.1, h=0)) +
 	scale_y_log10(breaks=c(25, 100, 400)) # plot data in customized plot
-# ggsave("denv_plot_1.png", dpi=700)
 
 mcols(res)$description # display information on the variables and tests performed
 
@@ -99,85 +92,8 @@ resOrdered # display the ordered results
 write.csv(as.data.frame(resOrdered),
 	  file="DENV_infected_results.csv") # write the ordered results as a dataframe to a csv file
 
-resSig <- subset(resOrdered, padj < 0.1) # get the subset of the results with an adjusted p-value less than 0.1
+resSig <- subset(resOrdered, padj < 0.3) # get the subset of the results with an adjusted p-value less than 0.1
 resSig # display the significant results
 
 write.csv(as.data.frame(resSig),
-	  file="DENV_infected_results_significant.csv") # write the significant ordered results as a data frame to a csv file
-
-colData(dds) # display the column data for the DESeq analysis data
-
-ddsMF <- dds # create a copy of the DESeq analysis for multi-factored design analysis
-
-levels(ddsMF$infection_status) # display the levels of the `infection_status` 
-
-levels(ddsMF$infection_status) <- sub("-.*", "", levels(ddsMF$infection_status)) # format level names so only includes letters
-levels(ddsMF$infection_status) # display levels
-
-design(ddsMF) <- formula(~ infection_status + donor) # set up multi-factor design experiment analysis
-ddsMF <- DESeq(ddsMF) # re-run DESeq analysis with multi-factor design
-
-resMF <- results(ddsMF) # generate results table for multi-factor design
-head(resMF) # display header row from results table
-
-resMFinfection_status <- results(ddsMF,
-		     contrast=c("infection_status", "DENV_infected", "uninfected")) # generate results table with contrast specified
-head(resMFinfection_status) # display header list from results table with contrast specified
-
-vsd <- vst(dds, blind=FALSE) # transform DESeq analysis dataset using vst
-rld <- rlog(dds, blind=FALSE) # transform DESeq analysis dataset using rlg
-head(assay(vsd), 3) # display header row of vsd transformed data
-
-ntd <- normTransform(dds) # compute normal transform giving log2(n + 1) of DESeq analysis data
-library("vsn") # load bioconductor library for variance stabilization and calibration
-meanSdPlot(assay(ntd)) # create mean standard deviation plot of normal tranform data
-
-meanSdPlot(assay(vsd)) # create mean standard deviation plot of vst transform data
-
-meanSdPlot(assay(rld)) # create mean standard deviation plot of rld tranform data
-
-library("pheatmap") # load library for creating clustered heat maps
-select <- order(rowMeans(counts(dds, normalized=TRUE)),
-		decreasing=TRUE)[1:20] # define selection criteria for data for heat map
-df <- as.data.frame(colData(dds)[,c("donor", "infection_status")]) # restructure data as a data frame for heat map
-# png("denv_pheatmap_plot_1.png")
-pheatmap(assay(ntd)[select,], cluster_rows=FALSE, show_rownames=FALSE,
-	 cluster_cols=FALSE, annotation_col=df) # create heat map of normal transform data
-# dev.off()
-# png("denv_pheatmap_plot_2.png")
-pheatmap(assay(vsd)[select,], cluster_rows=FALSE, show_rownames=FALSE,
-	 cluster_cols=FALSE, annotation_col=df) # create heat map of vsd tranform data
-# dev.off()
-# png("denv_pheatmap_plot_3.png")
-pheatmap(assay(rld)[select, ], cluster_rows=FALSE, show_rownames=FALSE,
-	 cluster_cols=FALSE, annotation_col=df) # create heat map of rld transform data
-# dev.off()
-
-sampleDists <- dist(t(assay(vsd))) # save sample distribution from vst tranform data
-
-library("RColorBrewer") # load RColorBrewer library to edit colors for plot
-sampleDistMatrix <- as.matrix(sampleDists) # make sample distributions a matrix
-rownames(sampleDistMatrix) <- paste(vsd$donor, vsd$infection_status, sep="-") # set row names of sample distribution matrix
-colnames(sampleDistMatrix) <- paste(vsd$donor, vsd$infection_status, sep="-") # NULL # set column names of sample distribution matrix to NULL
-colors <- colorRampPalette(rev(brewer.pal(9, "Purples")))(255) # define colors desired for plot
-
-# png("denv_pheatmap_plot_4.png")
-pheatmap(sampleDistMatrix,
-	 clustering_distance_rows=sampleDists,
-	 clustering_distance_cols=sampleDists,
-	 col=colors) # plot sample distributions as heat map
-# dev.off()
-
-# png("pca_pheatmap_plot_1.png")
-plotPCA(vsd, intgroup=c("infection_status", "donor")) # perform principal component analysis of vst transform data and plot
-# dev.off()
-
-pcaData <- plotPCA(vsd, intgroup=c("infection_status", "donor"), returnData=TRUE) # extract data from principal component analysis plot
-percentVar <- round(100 * attr(pcaData, "percentVar")) # scale percent variances up to out of 100% instead of out of 1
-ggplot(pcaData, aes(PC1, PC2, color=infection_status, shape=donor)) +
-	geom_point(size=3) +
-	xlab(paste0("PC1: ", percentVar[1], "% variance")) +
-	ylab(paste0("PC2: ", percentVar[2], "% variance")) +
-	coord_fixed() # plot principal component analysis plot customized
-# ggsave("denv_plot_1.png", dpi=700)
-
+	  file="DENV_infected_results_significant_high_p.csv") # write the significant ordered results as a data frame to a csv file
