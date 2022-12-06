@@ -21,25 +21,29 @@ ggvenn(
     show_percentage = FALSE,
     columns = c(
         "Dengue downregulated",
-        "Zika downregulated"))
+        "Zika downregulated"),
+        fill_color = c("#bc5090", "#ffa600"))
 ggvenn(
     data,
     show_percentage = FALSE,
     columns = c(
         "Dengue upregulated",
-        "Zika upregulated"))
+        "Zika upregulated"),
+        fill_color = c("#bc5090", "#ffa600"))
 
 ggvenn(
     data,
     show_percentage = FALSE,
     columns = c(
         "Dengue downregulated",
-        "Zika upregulated"))
+        "Zika upregulated"),
+        fill_color = c("#bc5090", "#ffa600"))
 
 ggvenn(
     data,
     show_percentage = FALSE,
     columns = c(
         "Dengue upregulated",
-        "Zika downregulated"))
+        "Zika downregulated"),
+        fill_color = c("#bc5090", "#ffa600"))
 
