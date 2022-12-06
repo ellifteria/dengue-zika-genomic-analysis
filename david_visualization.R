@@ -1,107 +1,242 @@
 library(ggplot2)
 
-d_u_FAC = data.frame(
-    term = c(
-        "response to endoplasmic\nreticulum stress",
-        "aminoacyl-tRNA\nsynthetase",
-        "ATP binding",
-        "ubiquitin protein\nligase binding",
-        "protein processing in\nendoplasmic reticulum"
-    ),
-    enrichment = c(
-        39.40408163265306,
-        52.14269788182832,
-        3.4894128525196484,
-        8.80905695611578,
-        11.017543859649123
-    ),
-    Category = c(
-        "Biological process",
-        "Molecular function",
-        "Molecular function",
-        "Molecular function",
-        "KEGG pathway"
-    ),
-    order = c(
-        1,
-        2,
-        3,
-        4,
-        5
-    )
-)
+DENV_downreg_df <- subset(read.csv("gene-ontology/DENV_infected_downreg_gene_names_FACh.txt", sep="\t"), (grepl("GOTERM", Category, fixed = TRUE ) | grepl("UP_KW", Category, fixed = TRUE)) & !grepl("PTM", Category, fixed = TRUE))
 
-ggplot(d_u_FAC, aes(x = reorder(term, -1* order), y = enrichment, fill = Category)) +
+DENV_downreg_df <- DENV_downreg_df[order(DENV_downreg_df$Benjamini),]
+
+for(n in 1:nrow(DENV_downreg_df)){
+    DENV_downreg_df[n, "Term"] = gsub("(.{10,}?)\\s", "\\1\n", sub(".*:", "", sub(".*~","",DENV_downreg_df[n, "Term"])))
+    DENV_downreg_df[n, "Category"] = switch(
+        DENV_downreg_df[n, "Category"],
+        "GOTERM_BP_DIRECT" = "Biological process",
+        "GOTERM_MF_DIRECT" = "Molecular function",
+        "KEGG_PATHWAY" = "KEGG pathway",
+        "GOTERM_CC_DIRECT" = "Cellular component",
+        "UP_SEQ_FEATURE" = "UniProt sequence feature",
+        "UP_KW_BIOLOGICAL_PROCESS" = "Biological process",
+        "UP_KW_CELLULAR_COMPONENT" = "Cellular component",
+        "UP_KW_MOLECULAR_FUNCTION" = "Molecular function",
+        DENV_downreg_df[n, "Category"]
+    )
+}
+
+ggplot(DENV_downreg_df[1:min(5, nrow(DENV_downreg_df)),], aes(x = reorder(Term, -1*Benjamini), y = Fold.Enrichment, fill = Category)) +
     geom_bar(stat = "identity") +
     coord_flip() +
     labs(
         legend = "Category",
         x = "Term",
         y = "Fold enrichment",
-        title = "Dengue upregulated RNAs:\nMost enriched functional annotation clusters"
+        title = "Dengue downregulated RNAs: Most\nsignificant gene functions\n(ordered by Benjamini)"
     )
 
-d_d_FAC = data.frame(
-    term = c(
-        "DNA binding"
-    ),
-    enrichment = c(
-        8.486806596701648
-    ),
-    Category = c(
-        "Molecular function"
-    ),
-    order = c(
-        1
-    )
-)
+DENV_upreg_df <- subset(read.csv("gene-ontology/DENV_infected_upreg_gene_names_FACh.txt", sep="\t"), (grepl("GOTERM", Category, fixed = TRUE ) | grepl("UP_KW", Category, fixed = TRUE)) & !grepl("PTM", Category, fixed = TRUE))
 
-ggplot(d_d_FAC, aes(x = reorder(term, -1* order), y = enrichment, fill = Category)) +
+DENV_upreg_df <- DENV_upreg_df[order(DENV_upreg_df$Benjamini),]
+
+for(n in 1:nrow(DENV_upreg_df)){
+    DENV_upreg_df[n, "Term"] = gsub("(.{10,}?)\\s", "\\1\n", sub(".*:", "", sub(".*~","",DENV_upreg_df[n, "Term"])))
+    DENV_upreg_df[n, "Category"] = switch(
+        DENV_upreg_df[n, "Category"],
+        "GOTERM_BP_DIRECT" = "Biological process",
+        "GOTERM_MF_DIRECT" = "Molecular function",
+        "KEGG_PATHWAY" = "KEGG pathway",
+        "GOTERM_CC_DIRECT" = "Cellular component",
+        "UP_SEQ_FEATURE" = "UniProt sequence feature",
+        "UP_KW_BIOLOGICAL_PROCESS" = "Biological process",
+        "UP_KW_CELLULAR_COMPONENT" = "Cellular component",
+        "UP_KW_MOLECULAR_FUNCTION" = "Molecular function",
+        DENV_upreg_df[n, "Category"]
+    )
+}
+
+ggplot(DENV_upreg_df[1:min(5, nrow(DENV_upreg_df)),], aes(x = reorder(Term, -1*Benjamini), y = Fold.Enrichment, fill = Category)) +
     geom_bar(stat = "identity") +
     coord_flip() +
     labs(
         legend = "Category",
         x = "Term",
         y = "Fold enrichment",
-        title = "Dengue downregulated RNAs:\nMost enriched functional annotation clusters"
+        title = "Dengue upregulated RNAs: Most\nsignificant gene functions\n(ordered by Benjamini)"
     )
 
-z_d_FAC = data.frame(
-    term = c(
-        "nucleosome",
-        "structural constituent\nof chromatin",
-        "ATP binding",
-        "ubiquitin protein\nligase binding",
-        "protein processing in\nendoplasmic reticulum"
-    ),
-    enrichment = c(
-        57.30337078651685,
-        52.14269788182832,
-        ,
-        ,
-        
-    ),
-    Category = c(
-        "Biological process",
-        "Molecular function",
-        "Molecular function",
-        "Molecular function",
-        "KEGG pathway"
-    ),
-    order = c(
-        1,
-        2,
-        3,
-        4,
-        5
+ZIKV_downreg_df <- subset(read.csv("gene-ontology/ZIKV_infected_downreg_gene_names_FACh.txt", sep="\t"), (grepl("GOTERM", Category, fixed = TRUE ) | grepl("UP_KW", Category, fixed = TRUE)) & !grepl("PTM", Category, fixed = TRUE))
+
+ZIKV_downreg_df <- ZIKV_downreg_df[order(ZIKV_downreg_df$Benjamini),]
+
+for(n in 1:nrow(ZIKV_downreg_df)){
+    ZIKV_downreg_df[n, "Term"] = gsub("(.{10,}?)\\s", "\\1\n", sub(".*:", "", sub(".*~","",ZIKV_downreg_df[n, "Term"])))
+    ZIKV_downreg_df[n, "Category"] = switch(
+        ZIKV_downreg_df[n, "Category"],
+        "GOTERM_BP_DIRECT" = "Biological process",
+        "GOTERM_MF_DIRECT" = "Molecular function",
+        "KEGG_PATHWAY" = "KEGG pathway",
+        "GOTERM_CC_DIRECT" = "Cellular component",
+        "UP_SEQ_FEATURE" = "UniProt sequence feature",
+        "UP_KW_BIOLOGICAL_PROCESS" = "Biological process",
+        "UP_KW_CELLULAR_COMPONENT" = "Cellular component",
+        "UP_KW_MOLECULAR_FUNCTION" = "Molecular function",
+        ZIKV_downreg_df[n, "Category"]
     )
-)
-ggplot(z_d_FAC, aes(x = reorder(term, -1* order), y = enrichment, fill = Category)) +
+}
+
+ggplot(ZIKV_downreg_df[1:min(5, nrow(ZIKV_downreg_df)),], aes(x = reorder(Term, -1*Benjamini), y = Fold.Enrichment, fill = Category)) +
     geom_bar(stat = "identity") +
     coord_flip() +
     labs(
         legend = "Category",
         x = "Term",
         y = "Fold enrichment",
-        title = "Zika downregulated RNAs:\nMost enriched functional annotation clusters"
+        title = "Zika downregulated RNAs: Most\nsignificant gene functions\n(ordered by Benjamini)"
     )
+
+ZIKV_upreg_df <- subset(read.csv("gene-ontology/ZIKV_infected_upreg_gene_names_FACh.txt", sep="\t"), (grepl("GOTERM", Category, fixed = TRUE ) | grepl("UP_KW", Category, fixed = TRUE)) & !grepl("PTM", Category, fixed = TRUE))
+
+ZIKV_upreg_df <- ZIKV_upreg_df[order(ZIKV_upreg_df$Benjamini),]
+
+for(n in 1:nrow(ZIKV_upreg_df)){
+    ZIKV_upreg_df[n, "Term"] = gsub("(.{10,}?)\\s", "\\1\n", sub(".*:", "", sub(".*~","",ZIKV_upreg_df[n, "Term"])))
+    ZIKV_upreg_df[n, "Category"] = switch(
+        ZIKV_upreg_df[n, "Category"],
+        "GOTERM_BP_DIRECT" = "Biological process",
+        "GOTERM_MF_DIRECT" = "Molecular function",
+        "KEGG_PATHWAY" = "KEGG pathway",
+        "GOTERM_CC_DIRECT" = "Cellular component",
+        "UP_SEQ_FEATURE" = "UniProt sequence feature",
+        "UP_KW_BIOLOGICAL_PROCESS" = "Biological process",
+        "UP_KW_CELLULAR_COMPONENT" = "Cellular component",
+        "UP_KW_MOLECULAR_FUNCTION" = "Molecular function",
+        ZIKV_upreg_df[n, "Category"]
+    )
+}
+
+ggplot(ZIKV_upreg_df[1:min(5, nrow(ZIKV_upreg_df)),], aes(x = reorder(Term, -1*Benjamini), y = Fold.Enrichment, fill = Category)) +
+    geom_bar(stat = "identity") +
+    coord_flip() +
+    labs(
+        legend = "Category",
+        x = "Term",
+        y = "Fold enrichment",
+        title = "Zika upregulated RNAs: Most\nsignificant gene functions\n(ordered by Benjamini)"
+    )
+
+# ~~~~~~~~ BP ONLY ~~~~~~~~
+
+DENV_downreg_df <- subset(read.csv("gene-ontology/DENV_infected_downreg_gene_names_FACh.txt", sep="\t"), (grepl("GOTERM", Category, fixed = TRUE ) | grepl("UP_KW", Category, fixed = TRUE)) & (grepl("BP", Category, fixed = TRUE ) | grepl("BIOLOGICAL_PROCESS", Category, fixed = TRUE)))
+
+DENV_upreDENV_downreg_dfg_df <- DENV_downreg_df[order(DENV_downreg_df$Benjamini),]
+
+for(n in 1:nrow(DENV_downreg_df)){
+    DENV_downreg_df[n, "Term"] = gsub("(.{10,}?)\\s", "\\1\n", sub(".*:", "", sub(".*~","",DENV_downreg_df[n, "Term"])))
+    DENV_downreg_df[n, "Category"] = switch(
+        DENV_downreg_df[n, "Category"],
+        "GOTERM_BP_DIRECT" = "Biological process",
+        "GOTERM_MF_DIRECT" = "Molecular function",
+        "KEGG_PATHWAY" = "KEGG pathway",
+        "GOTERM_CC_DIRECT" = "Cellular component",
+        "UP_SEQ_FEATURE" = "UniProt sequence feature",
+        "UP_KW_BIOLOGICAL_PROCESS" = "Biological process",
+        "UP_KW_CELLULAR_COMPONENT" = "Cellular component",
+        "UP_KW_MOLECULAR_FUNCTION" = "Molecular function",
+        DENV_downreg_df[n, "Category"]
+    )
+}
+
+
+ggplot(DENV_downreg_df[1:min(5, nrow(DENV_downreg_df)),], aes(x = reorder(Term, -1*Benjamini), y = Fold.Enrichment)) +
+    geom_bar(stat = "identity") +
+    coord_flip() +
+    labs(
+        x = "Term",
+        y = "Fold enrichment",
+        title = "Dengue downregulated RNAs: Most\nsignificant gene biological processes\n(ordered by Benjamini)"
+    )
+
+DENV_upreg_df <- subset(read.csv("gene-ontology/DENV_infected_upreg_gene_names_FACh.txt", sep="\t"), (grepl("GOTERM", Category, fixed = TRUE ) | grepl("UP_KW", Category, fixed = TRUE)) & (grepl("BP", Category, fixed = TRUE ) | grepl("BIOLOGICAL_PROCESS", Category, fixed = TRUE)))
+
+DENV_upreg_df <- DENV_upreg_df[order(DENV_upreg_df$Benjamini),]
+
+for(n in 1:nrow(DENV_upreg_df)){
+    DENV_upreg_df[n, "Term"] = gsub("(.{10,}?)\\s", "\\1\n", sub(".*:", "", sub(".*~","",DENV_upreg_df[n, "Term"])))
+    DENV_upreg_df[n, "Category"] = switch(
+        DENV_upreg_df[n, "Category"],
+        "GOTERM_BP_DIRECT" = "Biological process",
+        "GOTERM_MF_DIRECT" = "Molecular function",
+        "KEGG_PATHWAY" = "KEGG pathway",
+        "GOTERM_CC_DIRECT" = "Cellular component",
+        "UP_SEQ_FEATURE" = "UniProt sequence feature",
+        "UP_KW_BIOLOGICAL_PROCESS" = "Biological process",
+        "UP_KW_CELLULAR_COMPONENT" = "Cellular component",
+        "UP_KW_MOLECULAR_FUNCTION" = "Molecular function",
+        DENV_upreg_df[n, "Category"]
+    )
+}
+
+ggplot(DENV_upreg_df[1:min(5, nrow(DENV_upreg_df)),], aes(x = reorder(Term, -1*Benjamini), y = Fold.Enrichment)) +
+    geom_bar(stat = "identity") +
+    coord_flip() +
+    labs(
+        x = "Term",
+        y = "Fold enrichment",
+        title = "Dengue upregulated RNAs: Most\nsignificant gene biological processes\n(ordered by Benjamini)"
+    )
+
+ZIKV_downreg_df <- subset(read.csv("gene-ontology/ZIKV_infected_downreg_gene_names_FACh.txt", sep="\t"), (grepl("GOTERM", Category, fixed = TRUE ) | grepl("UP_KW", Category, fixed = TRUE)) & (grepl("BP", Category, fixed = TRUE ) | grepl("BIOLOGICAL_PROCESS", Category, fixed = TRUE)))
+
+ZIKV_downreg_df <- ZIKV_downreg_df[order(ZIKV_downreg_df$Benjamini),]
+
+for(n in 1:nrow(ZIKV_downreg_df)){
+    ZIKV_downreg_df[n, "Term"] = gsub("(.{10,}?)\\s", "\\1\n", sub(".*:", "", sub(".*~","",ZIKV_downreg_df[n, "Term"])))
+    ZIKV_downreg_df[n, "Category"] = switch(
+        ZIKV_downreg_df[n, "Category"],
+        "GOTERM_BP_DIRECT" = "Biological process",
+        "GOTERM_MF_DIRECT" = "Molecular function",
+        "KEGG_PATHWAY" = "KEGG pathway",
+        "GOTERM_CC_DIRECT" = "Cellular component",
+        "UP_SEQ_FEATURE" = "UniProt sequence feature",
+        "UP_KW_BIOLOGICAL_PROCESS" = "Biological process",
+        "UP_KW_CELLULAR_COMPONENT" = "Cellular component",
+        "UP_KW_MOLECULAR_FUNCTION" = "Molecular function",
+        ZIKV_downreg_df[n, "Category"]
+    )
+}
+
+ggplot(ZIKV_downreg_df[1:min(5, nrow(ZIKV_downreg_df)),], aes(x = reorder(Term, -1*Benjamini), y = Fold.Enrichment)) +
+    geom_bar(stat = "identity") +
+    coord_flip() +
+    labs(
+        x = "Term",
+        y = "Fold enrichment",
+        title = "Zika downregulated RNAs: Most\nsignificant gene biological processes\n(ordered by Benjamini)"
+    )
+
+ZIKV_upreg_df <- subset(read.csv("gene-ontology/ZIKV_infected_upreg_gene_names_FACh.txt", sep="\t"), (grepl("GOTERM", Category, fixed = TRUE ) | grepl("UP_KW", Category, fixed = TRUE)) & (grepl("BP", Category, fixed = TRUE ) | grepl("BIOLOGICAL_PROCESS", Category, fixed = TRUE)))
+
+ZIKV_upreg_df <- ZIKV_upreg_df[order(ZIKV_upreg_df$Benjamini),]
+
+for(n in 1:nrow(ZIKV_upreg_df)){
+    ZIKV_upreg_df[n, "Term"] = gsub("(.{10,}?)\\s", "\\1\n", sub(".*:", "", sub(".*~","",ZIKV_upreg_df[n, "Term"])))
+    ZIKV_upreg_df[n, "Category"] = switch(
+        ZIKV_upreg_df[n, "Category"],
+        "GOTERM_BP_DIRECT" = "Biological process",
+        "GOTERM_MF_DIRECT" = "Molecular function",
+        "KEGG_PATHWAY" = "KEGG pathway",
+        "GOTERM_CC_DIRECT" = "Cellular component",
+        "UP_SEQ_FEATURE" = "UniProt sequence feature",
+        "UP_KW_BIOLOGICAL_PROCESS" = "Biological process",
+        "UP_KW_CELLULAR_COMPONENT" = "Cellular component",
+        "UP_KW_MOLECULAR_FUNCTION" = "Molecular function",
+        ZIKV_upreg_df[n, "Category"]
+    )
+}
+
+ggplot(ZIKV_upreg_df[1:min(5, nrow(ZIKV_upreg_df)),], aes(x = reorder(Term, -1*Benjamini), y = Fold.Enrichment)) +
+    geom_bar(stat = "identity") +
+    coord_flip() +
+    labs(
+        x = "Term",
+        y = "Fold enrichment",
+        title = "Zika upregulated RNAs: Most\nsignificant gene biological processes\n(ordered by Benjamini)"
+    )
+
+
