@@ -1,7 +1,0 @@
-sample,donor,infection_status
-B_DENV_infected,B,DENV_infected
-A_DENV_infected,A,DENV_infected
-B_ZIKV_infected,B,ZIKV_infected
-A_ZIKV_infected,A,ZIKV_infected
-B_uninfected,B,uninfected
-A_uninfected,A,uninfected
